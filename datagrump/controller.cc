@@ -6,8 +6,8 @@
 using namespace std;
 
 /* Default constructor */
-Controller::Controller( const bool debug, int cwndow, int num_tok )
-  : debug_( debug ), cwnd (cwndow), tokens (num_tok)
+Controller::Controller( const bool debug, int cwndow)
+  : debug_( debug ), cwnd (cwndow)
 {
   if ( debug_ ) {
     cerr << "Initial window is " << cwnd << endl;
@@ -53,11 +53,8 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
 			       const uint64_t timestamp_ack_received )
                                /* when the ack was received (by sender) */
 {
-  tokens++;
-  cwnd = cwnd + 1 + (tokens == 3 ? 1 : 0);
-  if (tokens == 3)
-    tokens = 0;
-  if (timestamp_ack_received - send_timestamp_acked > 60)
+  cwnd ++;
+  if (cwnd > 20)
     timeout_event (); 
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
@@ -78,5 +75,5 @@ unsigned int Controller::timeout_ms( void )
 
 void Controller::timeout_event( void)
 {
-  cwnd = cwnd * 0.85;
+  cwnd = cwnd * 0.5;
 }

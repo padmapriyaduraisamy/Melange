@@ -10,8 +10,6 @@ class Controller
 private:
   bool debug_; /* Enables debugging output */
   int cwnd;    /* Variable window size */
-  int tokens;
-  /* Add member variables here */
 
 public:
   /* Public interface for the congestion controller */
@@ -19,7 +17,7 @@ public:
      the call site as well (in sender.cc) */
 
   /* Default constructor */
-  Controller( const bool debug, int cwndow = 10, int num_tok=0);
+  Controller( const bool debug, int cwndow = 10);
 
   /* Get current window size, in datagrams */
   unsigned int window_size( void );
