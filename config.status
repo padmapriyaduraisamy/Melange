@@ -437,11 +437,11 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/cs244/cs244_cc'
+ac_pwd='/home/ubuntu/cs244_cc'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/bin/mkdir -p'
-AWK='mawk'
+AWK='gawk'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
 ac_need_defaults=:
@@ -659,17 +659,17 @@ S["am__tar"]="$${TAR-tar} chof - \"$$tardir\""
 S["AMTAR"]="$${TAR-tar}"
 S["am__leading_dot"]="."
 S["SET_MAKE"]=""
-S["AWK"]="mawk"
+S["AWK"]="gawk"
 S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]=""
-S["install_sh"]="${SHELL} /home/cs244/cs244_cc/install-sh"
-S["MAKEINFO"]="${SHELL} /home/cs244/cs244_cc/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/cs244/cs244_cc/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /home/cs244/cs244_cc/missing automake-1.15"
-S["AUTOCONF"]="${SHELL} /home/cs244/cs244_cc/missing autoconf"
-S["ACLOCAL"]="${SHELL} /home/cs244/cs244_cc/missing aclocal-1.15"
+S["install_sh"]="${SHELL} /home/ubuntu/cs244_cc/install-sh"
+S["MAKEINFO"]="${SHELL} /home/ubuntu/cs244_cc/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/ubuntu/cs244_cc/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /home/ubuntu/cs244_cc/missing automake-1.15"
+S["AUTOCONF"]="${SHELL} /home/ubuntu/cs244_cc/missing autoconf"
+S["ACLOCAL"]="${SHELL} /home/ubuntu/cs244_cc/missing aclocal-1.15"
 S["VERSION"]="0.01"
 S["PACKAGE"]="sourdough"
 S["CYGPATH_W"]="echo"
