@@ -26,7 +26,7 @@ unsigned int Controller::window_size( void )
   }
 
 //  return the_window_size;
-  return cwnd;
+  return (int)cwnd;
 }
 
 /* A datagram was sent */
@@ -54,11 +54,13 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
                                /* when the ack was received (by sender) */
 {
 //  tokens++;
-  cwnd = cwnd + 1;
-//  if (tokens == 3)
+//  if (tokens == cwnd) {
+//    cwnd ++;
 //    tokens = 0;
-  //if (timestamp_ack_received - send_timestamp_acked > 60)
-  //  timeout_event (); 
+//  }
+  cwnd += 2/cwnd;
+  if (timestamp_ack_received - send_timestamp_acked > 90)
+    timeout_event (); 
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
 	 << " received ack for datagram " << sequence_number_acked
@@ -78,5 +80,5 @@ unsigned int Controller::timeout_ms( void )
 
 void Controller::timeout_event( void)
 {
-  cwnd = cwnd * 0.25;
+  cwnd = cwnd * 0.85;
 }

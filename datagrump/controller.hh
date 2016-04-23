@@ -9,7 +9,7 @@ class Controller
 {
 private:
   bool debug_; /* Enables debugging output */
-  int cwnd;    /* Variable window size */
+  double cwnd;    /* Variable window size */
   int tokens;
   /* Add member variables here */
 
