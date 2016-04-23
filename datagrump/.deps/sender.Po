@@ -121,12 +121,13 @@ sender.o: sender.cc /usr/include/stdc-predef.h /usr/include/c++/5/cstdlib \
  /usr/include/x86_64-linux-gnu/bits/in.h /usr/include/netdb.h \
  /usr/include/rpc/netdb.h /usr/include/x86_64-linux-gnu/bits/siginfo.h \
  /usr/include/x86_64-linux-gnu/bits/netdb.h ../src/file_descriptor.hh \
- contest_message.hh controller.hh ../src/poller.hh \
- /usr/include/c++/5/vector /usr/include/c++/5/bits/stl_construct.h \
+ contest_message.hh controller.hh /usr/include/c++/5/vector \
+ /usr/include/c++/5/bits/stl_construct.h \
  /usr/include/c++/5/bits/stl_uninitialized.h \
  /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
- /usr/include/poll.h /usr/include/x86_64-linux-gnu/sys/poll.h \
+ ../src/poller.hh /usr/include/poll.h \
+ /usr/include/x86_64-linux-gnu/sys/poll.h \
  /usr/include/x86_64-linux-gnu/bits/poll.h \
  /usr/include/x86_64-linux-gnu/bits/poll2.h
 
@@ -466,8 +467,6 @@ contest_message.hh:
 
 controller.hh:
 
-../src/poller.hh:
-
 /usr/include/c++/5/vector:
 
 /usr/include/c++/5/bits/stl_construct.h:
@@ -479,6 +478,8 @@ controller.hh:
 /usr/include/c++/5/bits/stl_bvector.h:
 
 /usr/include/c++/5/bits/vector.tcc:
+
+../src/poller.hh:
 
 /usr/include/poll.h:
 

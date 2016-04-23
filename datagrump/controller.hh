@@ -2,8 +2,10 @@
 #define CONTROLLER_HH
 
 #include <cstdint>
+#include <vector>
 
 #define PKT_SIZE 1500*8
+#define N 10 
 
 /* Congestion controller interface */
 class Controller
@@ -11,12 +13,10 @@ class Controller
 private:
   bool debug_; /* Enables debugging output */
   double cwnd;    /* Variable window size */
-  uint64_t prev_ack;
-  double trp;
-  double trc;
-  double alpha;
-  double beta;
-  /* Add member variables here */
+  uint64_t prev_ack_time;
+  double trp, trc, alpha_e, beta_e, SRTT, RTTVAR, RTO;
+  bool first_measurement, ss;
+  std::vector<uint64_t> rtt_hist;
 
 public:
   /* Public interface for the congestion controller */
@@ -24,7 +24,7 @@ public:
      the call site as well (in sender.cc) */
 
   /* Default constructor */
-  Controller( const bool debug, double cwndow = 10, uint64_t prev_ack = 0, double trp =0, double trc = 0, double alpha = 3, double beta = 1);
+  Controller( const bool debug);
 
   /* Get current window size, in datagrams */
   unsigned int window_size( void );
@@ -42,6 +42,8 @@ public:
   /* How long to wait (in milliseconds) if there are no acks
      before sending one more datagram */
   unsigned int timeout_ms( void );
+  void window_decrease (void);
+  void rtt_estimation (uint64_t rtt_cur);
   void timeout_event (void);
 };
 
