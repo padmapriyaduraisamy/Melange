@@ -6,8 +6,8 @@
 using namespace std;
 
 /* Default constructor */
-Controller::Controller( const bool debug, int cwndow, int num_tok )
-  : debug_( debug ), cwnd (cwndow), tokens (num_tok)
+Controller::Controller( const bool debug, double cwndow, uint64_t prv_ack, double prev, double cur, double a, double b)
+  : debug_( debug ), cwnd (cwndow),prev_ack (prv_ack), trp (prev), trc (cur), alpha (a), beta (b) 
 {
   if ( debug_ ) {
     cerr << "Initial window is " << cwnd << endl;
@@ -53,12 +53,22 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
 			       const uint64_t timestamp_ack_received )
                                /* when the ack was received (by sender) */
 {
-//  tokens++;
-//  if (tokens == cwnd) {
-//    cwnd ++;
-//    tokens = 0;
-//  }
-  cwnd += 2/cwnd;
+  uint64_t time_interval = (timestamp_ack_received - prev_ack);
+  if (time_interval == 0)
+    time_interval = 1;
+  trc = PKT_SIZE / time_interval;
+  double dtr = trc - trp;
+  double incr;
+  if (dtr == 0 || dtr > alpha) 
+    incr = 2/cwnd;
+  else if (dtr > beta)
+    incr = 1/cwnd;
+  else 
+    incr = 0;
+  cwnd = cwnd + incr;
+  trp = trc;
+  prev_ack = timestamp_ack_received;
+
   if (timestamp_ack_received - send_timestamp_acked > 90)
     timeout_event (); 
   if ( debug_ ) {

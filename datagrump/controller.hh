@@ -3,14 +3,19 @@
 
 #include <cstdint>
 
-/* Congestion controller interface */
+#define PKT_SIZE 1500*8
 
+/* Congestion controller interface */
 class Controller
 {
 private:
   bool debug_; /* Enables debugging output */
   double cwnd;    /* Variable window size */
-  int tokens;
+  uint64_t prev_ack;
+  double trp;
+  double trc;
+  double alpha;
+  double beta;
   /* Add member variables here */
 
 public:
@@ -19,7 +24,7 @@ public:
      the call site as well (in sender.cc) */
 
   /* Default constructor */
-  Controller( const bool debug, int cwndow = 10, int num_tok=0);
+  Controller( const bool debug, double cwndow = 10, uint64_t prev_ack = 0, double trp =0, double trc = 0, double alpha = 3, double beta = 1);
 
   /* Get current window size, in datagrams */
   unsigned int window_size( void );
