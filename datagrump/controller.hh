@@ -9,7 +9,8 @@ class Controller
 {
 private:
   bool debug_; /* Enables debugging output */
-
+  int cwnd;    /* Variable window size */
+  int tokens;
   /* Add member variables here */
 
 public:
@@ -18,7 +19,7 @@ public:
      the call site as well (in sender.cc) */
 
   /* Default constructor */
-  Controller( const bool debug );
+  Controller( const bool debug, int cwndow = 10, int num_tok=0);
 
   /* Get current window size, in datagrams */
   unsigned int window_size( void );
@@ -36,6 +37,7 @@ public:
   /* How long to wait (in milliseconds) if there are no acks
      before sending one more datagram */
   unsigned int timeout_ms( void );
+  void timeout_event (void);
 };
 
 #endif
