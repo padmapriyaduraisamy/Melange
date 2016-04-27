@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <pthread.h>
+#include <mutex>
+#include <vector>
 
 /* Congestion controller interface */
 
@@ -11,10 +13,13 @@ class Controller
 private:
   bool debug_; /* Enables debugging output */
   double Dmax_cur, Dmax_prev;
-  double dDelay;
-  
-
-  /* Add member variables here */
+  double dDelay, epoch_max_delay;
+  bool slow_start, loss_recovery, new_epoch;
+  std::vector<double> w_delay;
+  double Dest, Dmin, rto;
+  double wnd,s_wnd;
+  std::mutex lock_delay_vars;
+  std::vector<uint64_t> sent_list;
 
 public:
   /* Public interface for the congestion controller */
