@@ -5,6 +5,9 @@
 #include <pthread.h>
 #include <mutex>
 #include <vector>
+#include <sys/time.h>
+#include "../verus/lib/alglib/src/ap.h"
+#include "../verus/lib/alglib/src/interpolation.h"
 
 /* Congestion controller interface */
 
@@ -19,7 +22,12 @@ private:
   double Dest, Dmin, rto;
   double wnd,s_wnd;
   std::mutex lock_delay_vars;
-  std::vector<uint64_t> sent_list;
+  uint64_t loss_rec_seqno;
+  bool set_loss_rec_seqno;
+  double RTT_est;
+  bool have_spline;
+  double sender_w;
+  alglib::spline1dinterpolant splineTemp;
 
 public:
   /* Public interface for the congestion controller */
@@ -47,6 +55,8 @@ public:
   unsigned int timeout_ms( void );
   pthread_t wind_estimation_tid;                                                  
   static void* wind_estimation_thread (void* arg);  
+  void timeout_event (void);
+  double calcDelayCurve (double);
 };
 
 #endif
