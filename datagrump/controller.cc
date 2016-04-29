@@ -34,15 +34,10 @@ Controller::Controller( const bool debug )
 /* Get current window size, in datagrams */
 unsigned int Controller::window_size( void )
 {
-//  /* Default: fixed window size of 100 outstanding datagrams */
-//  unsigned int the_window_size = 50;
-
   if ( debug_ ) {
-    cerr << "At time " << timestamp_ms()
+    cout << "At time " << timestamp_ms()
 	 << " window size is " << cwnd << endl;
   }
-
-//  return the_window_size;
   return floor (cwnd);
 }
 
@@ -78,7 +73,6 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
   q_occup_map.erase(sequence_number_acked);
 
   double dtr = 1000 * (link_rate_cur - link_rate_prev);
-  //cout << "dtr " << dtr << endl;
   alpha = ALPHA * dtr + (1-ALPHA) * alpha;
   double incr = 0;
   if (slow_start)
@@ -111,21 +105,19 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
    before sending one more datagram */
 unsigned int Controller::timeout_ms( void )
 {
-  return RTO; /* timeout of one second */
+  return RTO;
 }
 
 void Controller::window_decrease(void)
 {
   if (slow_start)
     slow_start = false;
-//  cwnd = cwnd - (cwnd/packet_delay) * fabs(packet_delay - SRTT);
   cwnd *= 0.85;
 }
 
 void Controller::timeout_event (void)
 {
-  slow_start = true;
-  cwnd = 2;
+  cwnd *= 0.5;
 }
 
 void Controller::rtt_estimate (double rtt_cur)
