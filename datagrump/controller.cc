@@ -15,15 +15,16 @@ using namespace std;
 Controller::Controller( const bool debug )
   : debug_( debug ), 
     cwnd (2),
-    prev_ack (0), 
-    trp (0), 
-    trc (0), 
-    alpha (3), 
+    link_rate_prev (0), 
+    alpha (10), 
     beta (1),
     first_measurement (true),
     SRTT (0),
     RTTVAR (0),
-    RTO (1000)
+    RTO (1000),
+    q_occupancy (0),
+    q_occup_map (),
+    slow_start (true)
 {
   if ( debug_ ) {
     cerr << "Initial window is " << cwnd << endl;
@@ -51,7 +52,8 @@ void Controller::datagram_was_sent( const uint64_t sequence_number,
 				    const uint64_t send_timestamp )
                                     /* in milliseconds */
 {
-  /* Default: take no action */
+  q_occupancy++;
+  q_occup_map [sequence_number] = q_occupancy;
 
   if ( debug_ ) {
     cerr << "At time " << send_timestamp
@@ -69,26 +71,32 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
 			       const uint64_t timestamp_ack_received )
                                /* when the ack was received (by sender) */
 {
-  uint64_t time_interval = (timestamp_ack_received - prev_ack);
-  if (time_interval == 0)
-    time_interval = 1;
-  trc = PKT_SIZE / time_interval;
-  double dtr = trc - trp;
-  double incr;
-  if (dtr == 0 || dtr > alpha) 
-    incr = 2/cwnd;
-  else if (dtr > beta)
-    incr = 1/cwnd;
-  else 
-    incr = 0;
-  cwnd = cwnd + incr;
-  trp = trc;
-  prev_ack = timestamp_ack_received;
-
+  q_occupancy--;
   double delay = timestamp_ack_received - send_timestamp_acked;
+  double link_rate_cur = q_occup_map [sequence_number_acked] / delay;
+
+  q_occup_map.erase(sequence_number_acked);
+
+  double dtr = 1000 * (link_rate_cur - link_rate_prev);
+  //cout << "dtr " << dtr << endl;
+  alpha = ALPHA * dtr + (1-ALPHA) * alpha;
+  double incr = 0;
+  if (slow_start)
+    incr = 1;
+  else if (dtr > alpha*0.6) 
+    incr = 3/cwnd;
+  else if (dtr > alpha*0.3)
+    incr = 2/cwnd;
+  else if (dtr > 0)
+    incr = 1/cwnd;
+  
+  cwnd = cwnd + incr;
+  
+  link_rate_prev = link_rate_cur;
+
   rtt_estimate (delay);
-  if (delay > 90)
-    timeout_event (); 
+  if (delay > 120)
+    window_decrease ();
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
 	 << " received ack for datagram " << sequence_number_acked
@@ -106,9 +114,18 @@ unsigned int Controller::timeout_ms( void )
   return RTO; /* timeout of one second */
 }
 
-void Controller::timeout_event( void)
+void Controller::window_decrease(void)
 {
-  cwnd = cwnd * 0.85;
+  if (slow_start)
+    slow_start = false;
+//  cwnd = cwnd - (cwnd/packet_delay) * fabs(packet_delay - SRTT);
+  cwnd *= 0.85;
+}
+
+void Controller::timeout_event (void)
+{
+  slow_start = true;
+  cwnd = 2;
 }
 
 void Controller::rtt_estimate (double rtt_cur)
@@ -130,3 +147,4 @@ void Controller::rtt_estimate (double rtt_cur)
     else if (RTO > MAX_RTT)
       RTO = MAX_RTT; 
 }
+

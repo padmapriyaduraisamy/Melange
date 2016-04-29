@@ -2,8 +2,7 @@
 #define CONTROLLER_HH
 
 #include <cstdint>
-
-#define PKT_SIZE 1500*8
+#include <map>
 
 /* Congestion controller interface */
 class Controller
@@ -11,15 +10,16 @@ class Controller
 private:
   bool debug_; /* Enables debugging output */
   double cwnd;    /* Variable window size */
-  uint64_t prev_ack;
-  double trp;
-  double trc;
+  double link_rate_prev;
   double alpha;
   double beta;
   bool first_measurement;
   double SRTT;
   double RTTVAR;
   double RTO;
+  int q_occupancy;
+  std::map <uint64_t, int> q_occup_map;
+  bool slow_start;
   /* Add member variables here */
 
 public:
@@ -48,6 +48,7 @@ public:
   unsigned int timeout_ms( void );
   void timeout_event (void);
   void rtt_estimate (double);
+  void window_decrease (void);
 };
 
 #endif
