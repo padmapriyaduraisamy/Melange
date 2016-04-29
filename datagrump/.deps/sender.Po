@@ -121,33 +121,15 @@ sender.o: sender.cc /usr/include/stdc-predef.h /usr/include/c++/5/cstdlib \
  /usr/include/x86_64-linux-gnu/bits/in.h /usr/include/netdb.h \
  /usr/include/rpc/netdb.h /usr/include/x86_64-linux-gnu/bits/siginfo.h \
  /usr/include/x86_64-linux-gnu/bits/netdb.h ../src/file_descriptor.hh \
- contest_message.hh controller.hh /usr/include/c++/5/mutex \
- /usr/include/c++/5/chrono /usr/include/c++/5/ratio \
- /usr/include/c++/5/limits /usr/include/c++/5/ctime \
- /usr/include/c++/5/bits/parse_numbers.h /usr/include/c++/5/vector \
+ contest_message.hh controller.hh /usr/include/c++/5/map \
+ /usr/include/c++/5/bits/stl_tree.h \
+ /usr/include/c++/5/ext/aligned_buffer.h \
+ /usr/include/c++/5/bits/stl_map.h /usr/include/c++/5/bits/stl_multimap.h \
+ ../src/poller.hh /usr/include/c++/5/vector \
  /usr/include/c++/5/bits/stl_construct.h \
  /usr/include/c++/5/bits/stl_uninitialized.h \
  /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h /usr/include/c++/5/bits/vector.tcc \
- /usr/include/x86_64-linux-gnu/sys/time.h ../verus/lib/alglib/src/ap.h \
- /usr/include/c++/5/cstring /usr/include/string.h \
- /usr/include/x86_64-linux-gnu/bits/string3.h /usr/include/math.h \
- /usr/include/x86_64-linux-gnu/bits/huge_val.h \
- /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
- /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
- /usr/include/x86_64-linux-gnu/bits/inf.h \
- /usr/include/x86_64-linux-gnu/bits/nan.h \
- /usr/include/x86_64-linux-gnu/bits/mathdef.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
- /usr/include/x86_64-linux-gnu/bits/mathinline.h /usr/include/c++/5/list \
- /usr/include/c++/5/bits/stl_list.h /usr/include/c++/5/bits/list.tcc \
- /usr/include/setjmp.h /usr/include/x86_64-linux-gnu/bits/setjmp2.h \
- ../verus/lib/alglib/src/interpolation.h ../verus/lib/alglib/src/ap.h \
- ../verus/lib/alglib/src/alglibinternal.h \
- ../verus/lib/alglib/src/alglibmisc.h ../verus/lib/alglib/src/linalg.h \
- ../verus/lib/alglib/src/solvers.h ../verus/lib/alglib/src/optimization.h \
- ../verus/lib/alglib/src/specialfunctions.h \
- ../verus/lib/alglib/src/integration.h ../src/poller.hh \
  /usr/include/poll.h /usr/include/x86_64-linux-gnu/sys/poll.h \
  /usr/include/x86_64-linux-gnu/bits/poll.h \
  /usr/include/x86_64-linux-gnu/bits/poll2.h
@@ -488,17 +470,17 @@ contest_message.hh:
 
 controller.hh:
 
-/usr/include/c++/5/mutex:
+/usr/include/c++/5/map:
 
-/usr/include/c++/5/chrono:
+/usr/include/c++/5/bits/stl_tree.h:
 
-/usr/include/c++/5/ratio:
+/usr/include/c++/5/ext/aligned_buffer.h:
 
-/usr/include/c++/5/limits:
+/usr/include/c++/5/bits/stl_map.h:
 
-/usr/include/c++/5/ctime:
+/usr/include/c++/5/bits/stl_multimap.h:
 
-/usr/include/c++/5/bits/parse_numbers.h:
+../src/poller.hh:
 
 /usr/include/c++/5/vector:
 
@@ -511,64 +493,6 @@ controller.hh:
 /usr/include/c++/5/bits/stl_bvector.h:
 
 /usr/include/c++/5/bits/vector.tcc:
-
-/usr/include/x86_64-linux-gnu/sys/time.h:
-
-../verus/lib/alglib/src/ap.h:
-
-/usr/include/c++/5/cstring:
-
-/usr/include/string.h:
-
-/usr/include/x86_64-linux-gnu/bits/string3.h:
-
-/usr/include/math.h:
-
-/usr/include/x86_64-linux-gnu/bits/huge_val.h:
-
-/usr/include/x86_64-linux-gnu/bits/huge_valf.h:
-
-/usr/include/x86_64-linux-gnu/bits/huge_vall.h:
-
-/usr/include/x86_64-linux-gnu/bits/inf.h:
-
-/usr/include/x86_64-linux-gnu/bits/nan.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathdef.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathinline.h:
-
-/usr/include/c++/5/list:
-
-/usr/include/c++/5/bits/stl_list.h:
-
-/usr/include/c++/5/bits/list.tcc:
-
-/usr/include/setjmp.h:
-
-/usr/include/x86_64-linux-gnu/bits/setjmp2.h:
-
-../verus/lib/alglib/src/interpolation.h:
-
-../verus/lib/alglib/src/ap.h:
-
-../verus/lib/alglib/src/alglibinternal.h:
-
-../verus/lib/alglib/src/alglibmisc.h:
-
-../verus/lib/alglib/src/linalg.h:
-
-../verus/lib/alglib/src/solvers.h:
-
-../verus/lib/alglib/src/optimization.h:
-
-../verus/lib/alglib/src/specialfunctions.h:
-
-../verus/lib/alglib/src/integration.h:
-
-../src/poller.hh:
 
 /usr/include/poll.h:
 
