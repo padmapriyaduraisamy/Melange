@@ -2,21 +2,33 @@
 #define CONTROLLER_HH
 
 #include <cstdint>
+#include <pthread.h>
+#include <mutex>
 #include <vector>
-
-#define PKT_SIZE 1500*8
-#define N 10 
+#include <sys/time.h>
+#include "../verus/lib/alglib/src/ap.h"
+#include "../verus/lib/alglib/src/interpolation.h"
 
 /* Congestion controller interface */
+
 class Controller
 {
 private:
   bool debug_; /* Enables debugging output */
-  double cwnd;    /* Variable window size */
-  uint64_t prev_ack_time;
-  double trp, trc, alpha_e, beta_e, SRTT, RTTVAR, RTO;
-  bool first_measurement, ss;
-  std::vector<uint64_t> rtt_hist;
+  double Dmax_cur, Dmax_prev;
+  double dDelay, epoch_max_delay;
+  bool slow_start, loss_recovery, new_epoch;
+  std::vector<double> w_delay;
+  double Dest, Dmin, rto;
+  double wnd,s_wnd;
+  std::mutex lock_delay_vars;
+  uint64_t loss_rec_seqno;
+  bool set_loss_rec_seqno;
+  double RTT_est;
+  bool have_spline;
+  double sender_w;
+  alglib::spline1dinterpolant splineTemp;
+  int count;
 
 public:
   /* Public interface for the congestion controller */
@@ -24,7 +36,7 @@ public:
      the call site as well (in sender.cc) */
 
   /* Default constructor */
-  Controller( const bool debug);
+  Controller( const bool debug );
 
   /* Get current window size, in datagrams */
   unsigned int window_size( void );
@@ -42,9 +54,10 @@ public:
   /* How long to wait (in milliseconds) if there are no acks
      before sending one more datagram */
   unsigned int timeout_ms( void );
-  void window_decrease (void);
-  void rtt_estimation (uint64_t rtt_cur);
+  pthread_t wind_estimation_tid;                                                  
+  static void* wind_estimation_thread (void* arg);  
   void timeout_event (void);
+  double calcDelayCurve (double);
 };
 
 #endif
