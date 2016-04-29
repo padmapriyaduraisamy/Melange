@@ -111,13 +111,7 @@ controller.o: controller.cc /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /usr/include/x86_64-linux-gnu/bits/mathinline.h controller.hh \
- /usr/include/c++/5/map /usr/include/c++/5/bits/stl_tree.h \
- /usr/include/c++/5/ext/aligned_buffer.h \
- /usr/include/c++/5/bits/stl_map.h /usr/include/c++/5/tuple \
- /usr/include/c++/5/utility /usr/include/c++/5/bits/stl_relops.h \
- /usr/include/c++/5/array /usr/include/c++/5/bits/uses_allocator.h \
- /usr/include/c++/5/bits/stl_multimap.h ../src/timestamp.hh \
- /usr/include/c++/5/ctime
+ ../src/timestamp.hh /usr/include/c++/5/ctime
 
 /usr/include/stdc-predef.h:
 
@@ -416,26 +410,6 @@ controller.o: controller.cc /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/mathinline.h:
 
 controller.hh:
-
-/usr/include/c++/5/map:
-
-/usr/include/c++/5/bits/stl_tree.h:
-
-/usr/include/c++/5/ext/aligned_buffer.h:
-
-/usr/include/c++/5/bits/stl_map.h:
-
-/usr/include/c++/5/tuple:
-
-/usr/include/c++/5/utility:
-
-/usr/include/c++/5/bits/stl_relops.h:
-
-/usr/include/c++/5/array:
-
-/usr/include/c++/5/bits/uses_allocator.h:
-
-/usr/include/c++/5/bits/stl_multimap.h:
 
 ../src/timestamp.hh:
 

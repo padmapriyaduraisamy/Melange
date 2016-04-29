@@ -2,23 +2,26 @@
 #define CONTROLLER_HH
 
 #include <cstdint>
-#include <map>
+
+#define PKT_SIZE 1500*8
 
 /* Congestion controller interface */
-
 class Controller
 {
 private:
   bool debug_; /* Enables debugging output */
-  int q_occupancy;
-  double rtt;
-  double rtt_var;
-  double rto;
-  double link_rate_prev;
-  double wnd;
-  std::map <uint64_t, int> q_occup_map;
+  double cwnd;    /* Variable window size */
+  uint64_t prev_ack;
+  double trp;
+  double trc;
+  double alpha;
+  double beta;
+  bool first_measurement;
+  double SRTT;
+  double RTTVAR;
+  double RTO;
+  /* Add member variables here */
 
-  double rtt_estimate (double delay);
 public:
   /* Public interface for the congestion controller */
   /* You can change these if you prefer, but will need to change
@@ -43,6 +46,8 @@ public:
   /* How long to wait (in milliseconds) if there are no acks
      before sending one more datagram */
   unsigned int timeout_ms( void );
+  void timeout_event (void);
+  void rtt_estimate (double);
 };
 
 #endif
