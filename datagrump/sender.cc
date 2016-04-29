@@ -33,8 +33,6 @@ public:
   DatagrumpSender( const char * const host, const char * const port,
 		   const bool debug );
   int loop( void );
-  /* spawn estimator thread */
-  void create_estimator (void);
 };
 
 int main( int argc, char *argv[] )
@@ -57,7 +55,6 @@ int main( int argc, char *argv[] )
   /* create sender object to handle the accounting */
   /* all the interesting work is done by the Controller */
   DatagrumpSender sender( argv[ 1 ], argv[ 2 ], debug );
-  sender.create_estimator ();
   return sender.loop();
 }
 
@@ -151,15 +148,8 @@ int DatagrumpSender::loop( void )
       return ret.exit_status;
     } else if ( ret.result == PollResult::Timeout ) {
       /* After a timeout, send one datagram to try to get things moving again */
-      controller_.timeout_event ();
       send_datagram();
+      controller_.timeout_event();
     }
   }
-}
-
-void DatagrumpSender::create_estimator (void)
-{
- if (pthread_create(&(controller_.wind_estimation_tid), NULL,
-                    &(Controller::wind_estimation_thread), &(this->controller_)) != 0)
- cerr << "Could not create estimator thread" << endl; 
 }
