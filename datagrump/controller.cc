@@ -4,10 +4,10 @@
 #include "controller.hh"
 #include "timestamp.hh"
 
-#define MIN_RTT 50
-#define MAX_RTT 5000
-#define ALPHA   1.0/8.0
-#define BETA    1.0/4.0
+#define MIN_RTT 50       /* Min RTT */
+#define MAX_RTT 5000     /* Max RTT */
+#define ALPHA   1.0/8.0  /* Alpha for RTT estimate */
+#define BETA    1.0/4.0  /* Beta for RTT variance weighting */ 
 
 using namespace std;
 
@@ -16,8 +16,7 @@ Controller::Controller( const bool debug )
   : debug_( debug ), 
     cwnd (2),
     link_rate_prev (0), 
-    alpha (10), 
-    beta (1),
+    link_rate_ewma (10), 
     first_measurement (true),
     SRTT (0),
     RTTVAR (0),
@@ -69,17 +68,19 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
   q_occupancy--;
   double delay = timestamp_ack_received - send_timestamp_acked;
   double link_rate_cur = q_occup_map [sequence_number_acked] / delay;
-
+  /* Remove packet */
   q_occup_map.erase(sequence_number_acked);
 
   double dtr = 1000 * (link_rate_cur - link_rate_prev);
-  alpha = ALPHA * dtr + (1-ALPHA) * alpha;
+  link_rate_ewma = ALPHA * dtr + (1-ALPHA) * link_rate_ewma;
   double incr = 0;
+
+  /* Update window */
   if (slow_start)
     incr = 1;
-  else if (dtr > alpha*0.6) 
+  else if (dtr > link_rate_ewma*0.6) 
     incr = 3/cwnd;
-  else if (dtr > alpha*0.3)
+  else if (dtr > link_rate_ewma*0.3)
     incr = 2/cwnd;
   else if (dtr > 0)
     incr = 1/cwnd;
@@ -89,8 +90,11 @@ void Controller::ack_received( const uint64_t sequence_number_acked,
   link_rate_prev = link_rate_cur;
 
   rtt_estimate (delay);
+  
+  /* Adjust window */
   if (delay > 120)
     window_decrease ();
+  
   if ( debug_ ) {
     cerr << "At time " << timestamp_ack_received
 	 << " received ack for datagram " << sequence_number_acked
@@ -108,6 +112,7 @@ unsigned int Controller::timeout_ms( void )
   return RTO;
 }
 
+/* Update window on delay trigger */
 void Controller::window_decrease(void)
 {
   if (slow_start)
@@ -115,11 +120,7 @@ void Controller::window_decrease(void)
   cwnd *= 0.85;
 }
 
-void Controller::timeout_event (void)
-{
-  cwnd *= 0.5;
-}
-
+/* Estimate RTT */
 void Controller::rtt_estimate (double rtt_cur)
 {
   if (first_measurement) 

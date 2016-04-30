@@ -10,17 +10,15 @@ class Controller
 private:
   bool debug_; /* Enables debugging output */
   double cwnd;    /* Variable window size */
-  double link_rate_prev;
-  double alpha;
-  double beta;
-  bool first_measurement;
-  double SRTT;
-  double RTTVAR;
-  double RTO;
-  int q_occupancy;
-  std::map <uint64_t, int> q_occup_map;
-  bool slow_start;
-  /* Add member variables here */
+  double link_rate_prev; /* Previous link rate */
+  double link_rate_ewma;          /* Threshold for additive increase */
+  bool first_measurement;/* For slow start */ 
+  double SRTT;	         /* Estimated RTT */
+  double RTTVAR;         /* RTT variance */
+  double RTO;            /* Timeout */
+  int q_occupancy;       /* Queue occupancy */
+  std::map <uint64_t, int> q_occup_map; /* Tracking queue occupancy per packet*/
+  bool slow_start;      /* Are we in slow start */
 
 public:
   /* Public interface for the congestion controller */
@@ -46,8 +44,10 @@ public:
   /* How long to wait (in milliseconds) if there are no acks
      before sending one more datagram */
   unsigned int timeout_ms( void );
-  void timeout_event (void);
-  void rtt_estimate (double);
+  
+ /* Function to estimate RTT */
+  void rtt_estimate (double packet_delay);
+ /* How much to decrease window by */
   void window_decrease (void);
 };
 
